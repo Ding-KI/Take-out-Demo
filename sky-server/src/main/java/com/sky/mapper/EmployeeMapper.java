@@ -34,4 +34,12 @@ public interface EmployeeMapper {
      * @return
      */
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 根据主键动态修改属性
+     * @param employee
+     * 动态语句，mapper.xml中使用<set>标签
+     */
+
+    void update(Employee employee);
 }
