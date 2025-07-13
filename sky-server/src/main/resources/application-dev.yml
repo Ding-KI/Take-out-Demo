@@ -8,6 +8,4 @@ sky:
     password: 123456
   alioss:
     endpoint: oss-eu-central-1.aliyuncs.com
-    access-key-id: LTAI5tPU3Y4dYhi1AePc9jZ9
-    access-key-secret: eeZ6RUFPfxssNGvSCpAvar7ZjOHvcq
     bucket-name: takeout-demo

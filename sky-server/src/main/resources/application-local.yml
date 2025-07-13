@@ -1,0 +1,5 @@
+# application-local.yml（包含敏感信息，不提交到Git）
+sky:
+  alioss:
+    access-key-id: LTAI5tQ6KprKMSyAXZU3EzrT
+    access-key-secret: TFzGZD1tcOuLaIpnBJXKZPfQsJBE9V
