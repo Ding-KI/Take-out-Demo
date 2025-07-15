@@ -30,7 +30,7 @@ public class SetmealController {
      */
     @PostMapping
     @ApiOperation("新增套餐")
-    @CacheEvict(cacheNames = "setmealCache", key = "#SetmealDTO.categoryId")// 清除套餐缓存
+    @CacheEvict(cacheNames = "setmeal", key = "#setmealDTO.categoryId")// 清除套餐缓存
     public Result save(@RequestBody SetmealDTO setmealDTO) {
         setmealService.saveWithDish(setmealDTO);
         return Result.success();
@@ -54,7 +54,7 @@ public class SetmealController {
      */
     @DeleteMapping()
     @ApiOperation("批量删除套餐")
-    @CacheEvict(cacheNames = "setmealCache", allEntries = true) // 清除所有套餐缓存
+    @CacheEvict(cacheNames = "setmeal", allEntries = true) // 清除所有套餐缓存
     public Result delete(@RequestParam List<Long> ids) {
         setmealService.deleteBatch(ids);
         return Result.success();
@@ -77,7 +77,7 @@ public class SetmealController {
      */
     @PutMapping
     @ApiOperation("修改套餐")
-    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public Result update(@RequestBody SetmealDTO setmealDTO) {
         setmealService.update(setmealDTO);
         return Result.success();
@@ -90,7 +90,7 @@ public class SetmealController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation("停售或起售套餐")
-    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
+    @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public Result startOrStop(@PathVariable Integer status, Long id) {
         setmealService.startOrStop(status, id);
         return Result.success();
