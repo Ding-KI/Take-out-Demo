@@ -28,7 +28,10 @@ public interface DishService {
     // 根据分类id查询菜品数量
     List<Dish> list(Long categoryId);
 
-
+    //条件查询菜品和口味
     List<DishVO> listWithFlavor(Dish dish);
+
+    //菜品停售或起售
+    void startOrStop(Integer status, Long id);
 }
 

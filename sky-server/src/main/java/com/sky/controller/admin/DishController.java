@@ -84,14 +84,14 @@ public class DishController {
     }
 
 
-//    @PostMapping("/status/{status}")
-//    @ApiOperation("批量修改菜品状态")
-//    public Result<String> startOrStop(@PathVariable Integer status, Long id){
-//        dishService.startOrStop(status, id);
-//        // 清除缓存
-//        cleanCache("dish_*");
-//        return Result.success();
-//    }
+    @PostMapping("/status/{status}")
+    @ApiOperation("批量修改菜品状态")
+    public Result<String> startOrStop(@PathVariable Integer status, Long id){
+        dishService.startOrStop(status, id);
+        // 清除缓存
+        cleanCache("dish_*");
+        return Result.success();
+    }
 
     @GetMapping("/list")
     @ApiOperation("根据分类ID查询菜品列表")
