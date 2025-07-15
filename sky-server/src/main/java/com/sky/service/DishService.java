@@ -27,4 +27,8 @@ public interface DishService {
 
     // 根据分类id查询菜品数量
     List<Dish> list(Long categoryId);
+
+
+    List<DishVO> listWithFlavor(Dish dish);
 }
+
