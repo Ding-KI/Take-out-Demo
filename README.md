@@ -1,4 +1,4 @@
-# 🍕 Sky Food Delivery Management System
+# 🍕 Food Delivery Management Demo System
 
 A comprehensive backend system for food delivery management built with **Spring Boot**, showcasing enterprise-level Java development, MVC architecture, Redis caching, and modern backend practices.
 
@@ -104,16 +104,16 @@ sky-take-out/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/sky-food-delivery.git
-   cd sky-food-delivery
+   git clone https://github.com/yourusername/Take-out-Demo.git
+   cd Take-out-Demo
    ```
 
 2. **Database setup**
    ```sql
    CREATE DATABASE sky_delivery;
    USE sky_delivery;
-   -- Import the provided sky.sql script
-   SOURCE sky.sql;
+   -- Import the provided initialize.sql script
+   SOURCE initialize.sql;
    ```
 
 3. **Configuration setup**
