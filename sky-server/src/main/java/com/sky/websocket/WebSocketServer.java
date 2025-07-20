@@ -12,17 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * WebSocket服务
+ * WebSocket service
  */
 @Component
 @ServerEndpoint("/ws/{sid}")
 public class WebSocketServer {
 
-    //存放会话对象
+    // Store session objects
     private static Map<String, Session> sessionMap = new HashMap();
 
     /**
-     * 连接建立成功调用的方法
+     * Method called when connection is established successfully
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("sid") String sid) {
@@ -31,9 +31,9 @@ public class WebSocketServer {
     }
 
     /**
-     * 收到客户端消息后调用的方法
+     * Method called when a message is received from the client
      *
-     * @param message 客户端发送过来的消息
+     * @param message The message sent from the client
      */
     @OnMessage
     public void onMessage(String message, @PathParam("sid") String sid) {
@@ -41,7 +41,7 @@ public class WebSocketServer {
     }
 
     /**
-     * 连接关闭调用的方法
+     * Method called when the connection is closed
      *
      * @param sid
      */
@@ -52,7 +52,7 @@ public class WebSocketServer {
     }
 
     /**
-     * 群发
+     * Broadcast
      *
      * @param message
      */
@@ -60,7 +60,7 @@ public class WebSocketServer {
         Collection<Session> sessions = sessionMap.values();
         for (Session session : sessions) {
             try {
-                //服务器向客户端发送消息
+                // Server sends a message to the client
                 session.getBasicRemote().sendText(message);
             } catch (Exception e) {
                 e.printStackTrace();

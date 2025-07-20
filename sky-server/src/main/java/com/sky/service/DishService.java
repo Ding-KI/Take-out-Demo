@@ -10,28 +10,28 @@ import java.util.List;
 
 public interface DishService {
 
-    // 新增菜品并保存口味信息
+    // Add dish and save flavor information
     public void saveWithFlavor(DishDTO dishDTO);
 
-    // 分页查询菜品
+    // Page query dishes
     PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    // 批量删除菜品
+    // Batch delete dishes
     void deleteBatch(List<Long> ids);
 
-    // 根据ID查询菜品以及口味数据
+    // Query by ID
     DishVO getByIdWithFlavor(Long id);
 
-    //根据id修改菜品信息以及口味信息
+    // Modify dish information and flavor information by ID
     void updateWithFlavor(DishDTO dishDTO);
 
-    // 根据分类id查询菜品数量
+    // Query the number of dishes by category ID
     List<Dish> list(Long categoryId);
 
-    //条件查询菜品和口味
+    // Condition query dishes and flavors
     List<DishVO> listWithFlavor(Dish dish);
 
-    //菜品停售或起售
+    // Dish stop sale or start sale
     void startOrStop(Integer status, Long id);
 }
 

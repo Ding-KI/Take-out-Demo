@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController()
 @RequestMapping("/user/user")
-@Api(tags = "c端用户相关接口")
+@Api(tags = "Client-end user related interface")
 @Slf4j
 public class UserController {
 
@@ -34,9 +34,9 @@ public class UserController {
     private JwtProperties jwtProperties;
 
     @PostMapping("/login")
-    @ApiOperation("微信用户登录")
+    @ApiOperation("WeChat user login")
     public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO) {
-        log.info("微信用户登录: {}", userLoginDTO);
+        log.info("WeChat user login: {}", userLoginDTO);
         User user = userService.wxLogin(userLoginDTO);
         //为微信用户生成jwt令牌
         Map<String, Object> claims = new HashMap<>();

@@ -8,14 +8,14 @@ import java.util.List;
 public interface AddressBookMapper {
 
     /**
-     * 条件查询
+     * Query by conditions
      * @param addressBook
      * @return
      */
     List<AddressBook> list(AddressBook addressBook);
 
     /**
-     * 新增
+     * Add
      * @param addressBook
      */
     @Insert("insert into address_book" +
@@ -26,7 +26,7 @@ public interface AddressBookMapper {
     void insert(AddressBook addressBook);
 
     /**
-     * 根据id查询
+     * Query by ID
      * @param id
      * @return
      */
@@ -34,20 +34,20 @@ public interface AddressBookMapper {
     AddressBook getById(Long id);
 
     /**
-     * 根据id修改
+     * Modify by ID
      * @param addressBook
      */
     void update(AddressBook addressBook);
 
     /**
-     * 根据 用户id修改 是否默认地址
+     * Modify by user ID
      * @param addressBook
      */
     @Update("update address_book set is_default = #{isDefault} where user_id = #{userId}")
     void updateIsDefaultByUserId(AddressBook addressBook);
 
     /**
-     * 根据id删除地址
+     * Delete by ID
      * @param id
      */
     @Delete("delete from address_book where id = #{id}")

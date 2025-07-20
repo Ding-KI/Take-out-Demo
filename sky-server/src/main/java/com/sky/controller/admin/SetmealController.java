@@ -17,79 +17,79 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/setmeal")
-@Api(tags = "套餐管理接口")
+@Api(tags = "Setmeal management interface")
 @Slf4j
 
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
 
-    /*新增套餐
+    /*Add setmeal
     @param setmealDTO
     @return
      */
     @PostMapping
-    @ApiOperation("新增套餐")
-    @CacheEvict(cacheNames = "setmeal", key = "#setmealDTO.categoryId")// 清除套餐缓存
+    @ApiOperation("Add setmeal")
+    @CacheEvict(cacheNames = "setmeal", key = "#setmealDTO.categoryId")// Clear setmeal cache
     public Result save(@RequestBody SetmealDTO setmealDTO) {
         setmealService.saveWithDish(setmealDTO);
         return Result.success();
     }
 
     /*
-    套餐分页查询
+    Setmeal page query
     @param setmealPageQueryDTO
     @return
      */
     @GetMapping("/page")
-    @ApiOperation("套餐分页查询")
+    @ApiOperation("Setmeal page query")
     public Result<PageResult> page(SetmealPageQueryDTO setmealPageQueryDTO) {
         PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
         return Result.success(pageResult);
     }
 
     /*
-    批量删除套餐
+    Batch delete setmeal
     @param ids
      */
     @DeleteMapping()
-    @ApiOperation("批量删除套餐")
-    @CacheEvict(cacheNames = "setmeal", allEntries = true) // 清除所有套餐缓存
+    @ApiOperation("Batch delete setmeal")
+    @CacheEvict(cacheNames = "setmeal", allEntries = true) // Clear all setmeal cache
     public Result delete(@RequestParam List<Long> ids) {
         setmealService.deleteBatch(ids);
         return Result.success();
     }
 
-    /*    根据id查询套餐
-    @param id 套餐ID
-    @return 套餐信息
+    /*    Query setmeal by ID
+    @param id Setmeal ID
+    @return Setmeal information
      */
     @GetMapping("/{id}")
-    @ApiOperation("根据id查询套餐")
+    @ApiOperation("Query setmeal by ID")
     public Result<SetmealVO> getById(@PathVariable Long id) {
         SetmealVO setmealVO = setmealService.getByIdwithDish(id);
         return Result.success(setmealVO);
     }
 
-    /*修改套餐
-    @param setmealDTO 套餐信息
-    @return 成功响应
+    /*Modify setmeal
+    @param setmealDTO Setmeal information
+    @return Success response
      */
     @PutMapping
-    @ApiOperation("修改套餐")
+    @ApiOperation("Modify setmeal")
     @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public Result update(@RequestBody SetmealDTO setmealDTO) {
         setmealService.update(setmealDTO);
         return Result.success();
     }
 
-    /*停售或起售套餐
-    @param status 套餐状态
+    /*Stop or start selling setmeal
+    @param status Setmeal status
     @param id
-    @return 成功响应
+    @return Success response
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("停售或起售套餐")
+    @ApiOperation("Stop or start selling setmeal")
     @CacheEvict(cacheNames = "setmeal", allEntries = true)
     public Result startOrStop(@PathVariable Integer status, Long id) {
         setmealService.startOrStop(status, id);

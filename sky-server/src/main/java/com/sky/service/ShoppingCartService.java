@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface ShoppingCartService {
 
-    // 添加购物车
+    // Add shopping cart
     void addShoppingCart(ShoppingCartDTO shoppingCartDTO);
 
-    // 查询购物车
+    // Query shopping cart
     List<ShoppingCart> showShoppingCart();
 
 
-    // 清空购物车
+    // Clean shopping cart
     void cleanShoppingCart();
 
-    // 删除购物车中的某一项
+    // Delete an item in the shopping cart
     void subShoppingCart(ShoppingCartDTO shoppingCartDTO);
 }

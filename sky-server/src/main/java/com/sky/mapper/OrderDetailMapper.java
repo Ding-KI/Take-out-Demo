@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface OrderDetailMapper {
 
-    //批量插入购物车的信息至订单详情表
+    // Batch insert shopping cart information to order detail table
     void insertBatch(List<OrderDetail> orderDetailList);
-    //根据订单ID查询订单详情
+    // Query order details by order ID
     @Select("select * from order_detail where order_id = #{orderId}")
     List<OrderDetail> getByOrderId(Long orderId);
 }

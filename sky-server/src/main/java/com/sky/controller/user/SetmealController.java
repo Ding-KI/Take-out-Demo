@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController("userSetmealController")
 @RequestMapping("/user/setmeal")
-@Api(tags = "C端-套餐浏览接口")
+@Api(tags = "Client-end setmeal browsing interface")
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
@@ -32,7 +32,7 @@ public class SetmealController {
      */
 
     @GetMapping("/list")
-    @ApiOperation("根据分类id查询套餐")
+    @ApiOperation("Query setmeal by category ID")
     @Cacheable(cacheNames = "setmeal", key = "#categoryId")
     public Result<List<Setmeal>> list(Long categoryId) {
         Setmeal setmeal = new Setmeal();
@@ -44,13 +44,13 @@ public class SetmealController {
     }
 
     /**
-     * 根据套餐id查询包含的菜品列表
+     * Query dishes included in the setmeal by ID
      *
      * @param id
      * @return
      */
     @GetMapping("/dish/{id}")
-    @ApiOperation("根据套餐id查询包含的菜品列表")
+    @ApiOperation("Query dishes included in the setmeal by ID")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
         List<DishItemVO> list = setmealService.getDishItemById(id);
         return Result.success(list);

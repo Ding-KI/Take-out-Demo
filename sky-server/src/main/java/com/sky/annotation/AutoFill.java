@@ -1,7 +1,7 @@
 package com.sky.annotation;
 
 /*
-* 自定义注解，用于标识某个方法需要功能字段自动填充*/
+* Custom annotation, used to identify that a method needs to automatically fill the functional field*/ 
 
 import com.sky.enumeration.OperationType;
 
@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AutoFill {
-    //指定数据库操作类型: UPDATE, INSERT
+    // Specify database operation type: UPDATE, INSERT
     OperationType value();
 }

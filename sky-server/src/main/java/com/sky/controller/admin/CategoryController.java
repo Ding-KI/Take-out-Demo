@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 分类管理
+ * Category management
  */
 @RestController
 @RequestMapping("/admin/category")
@@ -26,76 +26,76 @@ public class CategoryController {
     private CategoryService categoryService;
 
     /**
-     * 新增分类
+     * Add category
      * @param categoryDTO
      * @return
      */
     @PostMapping
-    @ApiOperation("新增分类")
+    @ApiOperation("Add category")
     public Result<String> save(@RequestBody CategoryDTO categoryDTO){
-        log.info("新增分类：{}", categoryDTO);
+        log.info("Add category: {}", categoryDTO);
         categoryService.save(categoryDTO);
         return Result.success();
     }
 
     /**
-     * 分类分页查询
+     * Category page query
      * @param categoryPageQueryDTO
      * @return
      */
     @GetMapping("/page")
-    @ApiOperation("分类分页查询")
+    @ApiOperation("Category page query")
     public Result<PageResult> page(CategoryPageQueryDTO categoryPageQueryDTO){
-        log.info("分页查询：{}", categoryPageQueryDTO);
+        log.info("Page query: {}", categoryPageQueryDTO);
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
         return Result.success(pageResult);
     }
 
     /**
-     * 删除分类
+     * Delete category
      * @param id
      * @return
      */
     @DeleteMapping
-    @ApiOperation("删除分类")
+    @ApiOperation("Delete category")
     public Result<String> deleteById(Long id){
-        log.info("删除分类：{}", id);
+        log.info("Delete category: {}", id);
         categoryService.deleteById(id);
         return Result.success();
     }
 
     /**
-     * 修改分类
+     * Modify category
      * @param categoryDTO
      * @return
      */
     @PutMapping
-    @ApiOperation("修改分类")
+    @ApiOperation("Modify category")
     public Result<String> update(@RequestBody CategoryDTO categoryDTO){
         categoryService.update(categoryDTO);
         return Result.success();
     }
 
     /**
-     * 启用、禁用分类
+     * Enable/disable category
      * @param status
      * @param id
      * @return
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("启用禁用分类")
+    @ApiOperation("Enable/disable category")
     public Result<String> startOrStop(@PathVariable("status") Integer status, Long id){
         categoryService.startOrStop(status,id);
         return Result.success();
     }
 
     /**
-     * 根据类型查询分类
+     * Query category by type
      * @param type
      * @return
      */
     @GetMapping("/list")
-    @ApiOperation("根据类型查询分类")
+    @ApiOperation("Query category by type")
     public Result<List<Category>> list(Integer type){
         List<Category> list = categoryService.list(type);
         return Result.success(list);

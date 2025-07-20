@@ -33,46 +33,46 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private SetmealMapper setmealMapper;
 
     /**
-     * 根据时间段统计营业数据
+     * Count business data by time range
      * @param begin
      * @param end
      * @return
      */
     public BusinessDataVO getBusinessData(LocalDateTime begin, LocalDateTime end) {
         /**
-         * 营业额：当日已完成订单的总金额
-         * 有效订单：当日已完成订单的数量
-         * 订单完成率：有效订单数 / 总订单数
-         * 平均客单价：营业额 / 有效订单数
-         * 新增用户：当日新增用户的数量
+         * Turnover: The total amount of completed orders on the current day
+         * Valid orders: The number of completed orders on the current day
+         * Order completion rate: Valid order count / total order count
+         * Average customer unit price: Turnover / valid order count
+         * New users: The number of new users on the current day
          */
 
         Map map = new HashMap();
         map.put("begin",begin);
         map.put("end",end);
 
-        //查询总订单数
+        // Query the total number of orders
         Integer totalOrderCount = orderMapper.countByMap(map);
 
         map.put("status", Orders.COMPLETED);
-        //营业额
+        // Turnover
         Double turnover = orderMapper.sumByMap(map);
         turnover = turnover == null? 0.0 : turnover;
 
-        //有效订单数
+        // Valid order count
         Integer validOrderCount = orderMapper.countByMap(map);
 
         Double unitPrice = 0.0;
 
         Double orderCompletionRate = 0.0;
         if(totalOrderCount != 0 && validOrderCount != 0){
-            //订单完成率
+            // Order completion rate
             orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount;
-            //平均客单价
+            // Average customer unit price
             unitPrice = turnover / validOrderCount;
         }
 
-        //新增用户数
+        // New user count
         Integer newUsers = userMapper.countByMap(map);
 
         return BusinessDataVO.builder()
@@ -86,7 +86,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 
     /**
-     * 查询订单管理数据
+     * Query order management data
      *
      * @return
      */
@@ -95,22 +95,22 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         map.put("begin", LocalDateTime.now().with(LocalTime.MIN));
         map.put("status", Orders.TO_BE_CONFIRMED);
 
-        //待接单
+        // Waiting for order
         Integer waitingOrders = orderMapper.countByMap(map);
 
-        //待派送
+        // Waiting for delivery
         map.put("status", Orders.CONFIRMED);
         Integer deliveredOrders = orderMapper.countByMap(map);
 
-        //已完成
+        // Completed
         map.put("status", Orders.COMPLETED);
         Integer completedOrders = orderMapper.countByMap(map);
 
-        //已取消
+        // Cancelled
         map.put("status", Orders.CANCELLED);
         Integer cancelledOrders = orderMapper.countByMap(map);
 
-        //全部订单
+        // All orders
         map.put("status", null);
         Integer allOrders = orderMapper.countByMap(map);
 
@@ -124,7 +124,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     /**
-     * 查询菜品总览
+     * Query dish overview
      *
      * @return
      */
@@ -143,7 +143,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     /**
-     * 查询套餐总览
+     * Query setmeal overview
      *
      * @return
      */

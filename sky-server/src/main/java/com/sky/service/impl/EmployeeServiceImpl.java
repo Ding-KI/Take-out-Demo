@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeMapper employeeMapper;
 
     /**
-     * 员工登录
+     * Employee login
      *
      * @param employeeLoginDTO
      * @return
@@ -40,61 +40,61 @@ public class EmployeeServiceImpl implements EmployeeService {
         String username = employeeLoginDTO.getUsername();
         String password = employeeLoginDTO.getPassword();
 
-        //1、根据用户名查询数据库中的数据
+        //1、Query data from database by username
         Employee employee = employeeMapper.getByUsername(username);
 
-        //2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
+        //2、 Handle various exceptions (username does not exist, password is incorrect, account is locked)
         if (employee == null) {
-            //账号不存在
+            // Account does not exist
             throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
         }
 
-        //密码比对
-        // 对前端传过来的密码明文进行md5加密，然后再进行比对
+        // Password comparison
+        // Encrypt the plaintext password passed from the front end with md5, and then compare
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
-            //密码错误
+            // Password error
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
         if (employee.getStatus() == StatusConstant.DISABLE) {
-            //账号被锁定
+            // Account locked
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         }
 
-        //3、返回实体对象
+        //3、 Return entity object
         return employee;
     }
 
     /**
-     * 新增员工业务方法
+     * Add employee business method
      *
      * @param employeeDTO
      */
     public void save(EmployeeDTO employeeDTO) {
         System.out.println("当前线程id：" + Thread.currentThread().getId());
         Employee employee = new Employee();
-        // 将DTO转换为实体对象,对象属性拷贝-前提是 DTO和实体对象的属性名一致
+        // Convert DTO to entity object, object property copy 
         BeanUtils.copyProperties(employeeDTO, employee);
-        //设置帐号状态，默认正常
+        // Set account status, default normal
         employee.setStatus(StatusConstant.ENABLE);
-        //设置密码，默认123456
+        // Set password, default 123456
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-        //设置当前创建时间、修改时间
+        // Set current creation time, modification time
 //        employee.setCreateTime(LocalDateTime.now());
 //        employee.setUpdateTime(LocalDateTime.now());
 
-        //设置当前记录的创建人id和修改人id-暂时写死
+        // Set the creation person id and modification person id of the current record - temporarily hardcoded
 //        employee.setCreateUser(BaseContext.getCurrentId());
 //        employee.setUpdateUser(BaseContext.getCurrentId());
 
-        //执行插入操作
+        // Execute insert operation
         employeeMapper.insert(employee);
     }
 
-    //员工分页查询
+    // Employee page query
     public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
-        //分页查询逻辑
+        // Page query logic
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
         Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
         long total = page.getTotal();
@@ -103,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * 启用禁用员工账号
+     * Enable, disable employee account
      *
      * @param status
      * @param id
@@ -111,8 +111,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void startOrStop(Integer status, Long id) {
         //update employee set status = ? where id = ?
-        //使用动态SQL更新
-        //用实体类传递参数-builder构建对象
+        // Use dynamic SQL update
+        // Use entity class to pass parameters - builder build object
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
@@ -121,19 +121,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * 根据id查询员工信息
+     * Query employee information by ID
      * @param id
      * @return
      */
     public Employee getById(Long id) {
-        //查询员工信息
+        // Query employee information
         Employee employee = employeeMapper.getById(id);
-        employee.setPassword("*********"); // 不返回密码
+        employee.setPassword("*********"); // Do not return password
         return employee;
     }
 
     /**
-     * 修改员工信息
+     * Modify employee information
      * @param employeeDTO
      */
     public void update(EmployeeDTO employeeDTO) {

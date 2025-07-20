@@ -12,26 +12,26 @@ import java.util.List;
 
 public interface ShoppingCartMapper {
 
-    //动态查询购物车
+    // Dynamic query shopping cart
     List<ShoppingCart> list(ShoppingCart shoppingCart);
 
-    //根据用户id，增加用户的购物车的商品数量+1
+    // Increase the number of products in the shopping cart of the user by 1
     @Update("UPDATE shopping_cart SET number = #{number} WHERE id = #{id}")
     void updateNumberById(ShoppingCart shoppingCart);
 
-    //插入购物车记录
+    // Insert shopping cart record
     @Insert("insert into shopping_cart (name, user_id, dish_id, setmeal_id, dish_flavor, number, amount, image, create_time) " +
             "values (#{name}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{image}, #{createTime})")
     void insert(ShoppingCart shoppingCart);
 
-    //根据用户id删除购物车记录
+    // Delete shopping cart record by user ID
     @Delete("DELETE FROM shopping_cart WHERE user_id = #{userId}")
     void deleteByUserId(Long userId);
 
-    //根据用户id删除购物车记录
+    // Delete shopping cart record by user ID
     @Delete("DELETE FROM shopping_cart WHERE id = #{userId}")
     void deleteById(Long userId);
 
-    //批量插入购物车数据
+    // Batch insert shopping cart data
     void insertBatch(List<ShoppingCart> shoppingCartList);
 }

@@ -22,38 +22,38 @@ import java.util.Map;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-// 微信登录接口地址
+// WeChat login interface address
     public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
     @Autowired
     private WeChatProperties weChatProperties;
     @Autowired
     private UserMapper userMapper;
-    /*微信登录
+    /*WeChat login
      */
     public User wxLogin(UserLoginDTO userLoginDTO) {
         String openid = getOpenId(userLoginDTO.getCode());
-        //openid若为空，则抛出异常，表示登录失败
+        // If the openid is empty, throw an exception, indicating that the login failed
         if (openid == null || openid.isEmpty()) {
             throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
         }
-        //识别用户是否是新用户，若是，则需要存储用户信息；
+        // Identify whether the user is a new user, if it is, store the user information;
         User user = userMapper.getByOpenId(openid);
         if (user == null) {
             user = User.builder()
                     .openid(openid)
                     .createTime(LocalDateTime.now())
                     .build();
-            //存储用户信息
+            // Store user information
             userMapper.insert(user);
         }
-        //返回用户对象
+        // Return the user object
         return user;
     }
 
-    //获取openid
+    // Get openid
     private String getOpenId(String code) {
-        //构建请求参数
-        //调用微信接口获取用户信息获取openid
+        // Build request parameters
+        // Call the WeChat interface to get user information and get openid
         Map<String,String> map = new HashMap<>();
         map.put("appid", weChatProperties.getAppid());
         map.put("secret", weChatProperties.getSecret());

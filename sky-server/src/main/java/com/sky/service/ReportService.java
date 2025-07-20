@@ -9,17 +9,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 public interface ReportService {
-    //统计指定日期区间内的营业额
+    // Count sales by date range
     TurnoverReportVO getTurnoverStatistics (LocalDate begin, LocalDate end);
 
     UserReportVO getUserStatistics (LocalDate begin, LocalDate end);
 
     OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end);
 
-    //获取销售额前10的商品，指定日期区间
+    // Get the top 10 products by sales, specified date range
     SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end);
 
 
-    //导出报表
+    // Export report
     void exportReport(HttpServletResponse response);
 }

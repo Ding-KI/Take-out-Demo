@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 菜品管理控制器
- * 负责菜品的增删改查等操作
+ * Dish management controller
+ * Responsible for the addition, deletion, modification and query of dishes
  */
 
 @RestController
 @RequestMapping("/admin/dish")
-@Api(tags = "菜品管理接口")
+@Api(tags = "Dish management interface")
 @Slf4j
 public class DishController {
 
@@ -39,64 +39,64 @@ public class DishController {
     }
 
     @PostMapping
-    @ApiOperation("新增保存菜品")
+    @ApiOperation("Add and save dish")
     public Result save(@RequestBody DishDTO dishDTO) {
-        log.info("新增菜品: {}", dishDTO);
+        log.info("Add dish: {}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
-        // 清除相关缓存
+        // Clear related cache
         String key = "dish_" + dishDTO.getCategoryId();
         cleanCache(key);
         return Result.success();
     }
 
     @GetMapping("/page")
-    @ApiOperation("分页查询菜品")
+    @ApiOperation("Dish page query")
     public Result<PageResult> page (DishPageQueryDTO dishPageQueryDTO) {
-        log.info("菜品分页查询: {}", dishPageQueryDTO);
+        log.info("Dish page query: {}", dishPageQueryDTO);
         PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
         return Result.success(pageResult);
     }
 
     @DeleteMapping()
-    @ApiOperation("批量删除菜品")
+    @ApiOperation("Batch delete dish")
     public Result delete(@RequestParam List<Long> ids) {
-        log.info("删除菜品，ID: {}", ids);
+        log.info("Delete dish, ID: {}", ids);
         dishService.deleteBatch(ids);
         cleanCache("dish_*");
-        return Result.success("菜品删除成功");
+        return Result.success("Dish deleted successfully");
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("根据ID查询菜品")
+    @ApiOperation("Query dish by ID")
     public Result<DishVO> getById(@PathVariable Long id) {
-        log.info("查询菜品，ID: {}", id);
+        log.info("Query dish, ID: {}", id);
         DishVO dishVO = dishService.getByIdWithFlavor(id);
         return Result.success(dishVO);
     }
 
     @PutMapping
-    @ApiOperation("修改菜品")
+    @ApiOperation("Modify dish")
     public Result update(@RequestBody DishDTO dishDTO) {
-        log.info("修改菜品: {}", dishDTO);
+        log.info("Modify dish: {}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
         cleanCache("dish_*");
-        return Result.success("菜品修改成功");
+        return Result.success("Dish modified successfully");
     }
 
 
     @PostMapping("/status/{status}")
-    @ApiOperation("批量修改菜品状态")
+    @ApiOperation("Batch modify dish status")
     public Result<String> startOrStop(@PathVariable Integer status, Long id){
         dishService.startOrStop(status, id);
-        // 清除缓存
+        // Clear cache
         cleanCache("dish_*");
         return Result.success();
     }
 
     @GetMapping("/list")
-    @ApiOperation("根据分类ID查询菜品列表")
+    @ApiOperation("Query dish list by category ID")
     public Result<List<Dish>> list(Long categoryId) {
-        log.info("查询分类ID为 {} 的菜品列表", categoryId);
+        log.info("Query dish list by category ID: {}", categoryId);
         List<Dish> List = dishService.list(categoryId);
         return Result.success(List);
     }

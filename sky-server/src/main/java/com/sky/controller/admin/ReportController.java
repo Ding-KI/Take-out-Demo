@@ -11,19 +11,21 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
- * 统计管理接口
+ * Report management interface
  */
-@RestController
+
+@Component
 @RequestMapping("/admin/report")
-@Api(tags = "统计管理接口")
+@Api(tags = "Report management interface")
 @Slf4j
 public class ReportController {
 
@@ -31,52 +33,52 @@ public class ReportController {
     private ReportService reportService;
 
     @GetMapping("/turnoverStatistics")
-    @ApiOperation("营业额统计")
+    @ApiOperation("Turnover statistics")
     public Result<TurnoverReportVO> turnoverStatistics(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
-        log.info("营业额统计，开始时间：{}，结束时间：{}", begin, end);
+        log.info("Turnover statistics, start time: {}, end time: {}", begin, end);
 
         return Result.success(reportService.getTurnoverStatistics(begin, end));
     }
 
-    //用户统计
+    // User statistics
     @GetMapping("/userStatistics")
-    @ApiOperation("用户统计")
+    @ApiOperation("User statistics")
     public Result<UserReportVO> userStatistics(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
     {
-        log.info("用户统计");
+        log.info("User statistics");
         return Result.success(reportService.getUserStatistics(begin, end));
     }
 
-    // 订单统计
+    // Order statistics
     @GetMapping("/orderStatistics")
-    @ApiOperation("订单统计")
+    @ApiOperation("Order statistics")
     public Result<OrderReportVO> orderStatistics(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
     {
-        log.info("订单统计，开始时间：{}，结束时间：{}", begin, end);
+        log.info("Order statistics, start time: {}, end time: {}", begin, end);
         return Result.success(reportService.getOrderStatistics(begin, end));
     }
 
-    //统计销量前十的菜品
+    // Statistics for the top 10 dishes by sales
     @GetMapping("/top10")
-    @ApiOperation("销量前十的菜品")
+    @ApiOperation("Top 10 dishes by sales")
     public Result<SalesTop10ReportVO> top10(
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end)
     {
-        log.info("销量排名top10，开始时间：{}，结束时间：{}", begin, end);
+        log.info("Sales ranking top 10, start time: {}, end time: {}", begin, end);
         return Result.success(reportService.getSalesTop10(begin, end));
     }
 
-    /* 导出报表
+    /* Export report
     * */
     @GetMapping("/export")
-    @ApiOperation("导出报表")
+    @ApiOperation("Export report")
     public void exportReport(HttpServletResponse response) {
         reportService.exportReport(response);
     }

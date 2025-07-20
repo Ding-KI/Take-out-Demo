@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin/common")
-@Api(tags = "通用接口")
+@Api(tags = "Common interface")
 @Slf4j
 public class CommonController {
 
@@ -29,21 +29,21 @@ public class CommonController {
     private AliOssUtil aliOssUtil;
 
     @PostMapping("/upload")
-    @ApiOperation("上传文件")
-    public Result<String> upload(MultipartFile file){ // 上传文件,参数名和前端保持一致{
-        log.info("上传文件: {}", file);
+    @ApiOperation("Upload file")
+    public Result<String> upload(MultipartFile file){ // Upload file, parameter name and front end keep consistent{
+        log.info("Upload file: {}", file);
         try {
-            //原始文件名
+            // Original file name
             String originalFilename = file.getOriginalFilename();
-            // 截取文件名后缀
+            // Extract file name suffix
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-            // 生成新的文件名
+            // Generate new file name
             String objectName = UUID.randomUUID().toString() + suffix;
-            //获取文件请求路径
+            // Get file request path
             String filePath = aliOssUtil.upload(file.getBytes(),objectName);
             return Result.success(filePath);
         } catch (IOException e) {
-            log.error("文件上传失败: {}", e);
+            log.error("File upload failed: {}", e);
         }
         return Result.error(MessageConstant.UPLOAD_FAILED);
     }

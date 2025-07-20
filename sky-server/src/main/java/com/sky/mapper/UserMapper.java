@@ -9,16 +9,16 @@ import java.util.Map;
 @Mapper
 public interface UserMapper {
 
-    // 根据openId查询用户
+    // Query by openId
     @Select("select * from user where openid = #{openid}")
     User getByOpenId(String openId);
 
-    //插入新用户数据
+    // Insert new user data
     void insert(User user);
 
     @Select("select * from user where id = #{id}")
     User getById(Long userId);
 
-    //动态统计用户数量-新增用户、每日用户
+    // Dynamic count user number - new user, daily user
     Integer countByMap(Map map);
 }

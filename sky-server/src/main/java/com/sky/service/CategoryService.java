@@ -9,39 +9,39 @@ import java.util.List;
 public interface CategoryService {
 
     /**
-     * 新增分类
+     * Add category
      * @param categoryDTO
      */
     void save(CategoryDTO categoryDTO);
 
     /**
-     * 分页查询
+     * Page query
      * @param categoryPageQueryDTO
      * @return
      */
     PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
 
     /**
-     * 根据id删除分类
+     * Delete by ID
      * @param id
      */
     void deleteById(Long id);
 
     /**
-     * 修改分类
+     * Modify category
      * @param categoryDTO
      */
     void update(CategoryDTO categoryDTO);
 
     /**
-     * 启用、禁用分类
+     * Enable, disable category
      * @param status
      * @param id
      */
     void startOrStop(Integer status, Long id);
 
     /**
-     * 根据类型查询分类
+     * Query by type
      * @param type
      * @return
      */

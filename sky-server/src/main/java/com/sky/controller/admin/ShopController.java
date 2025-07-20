@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController("adminShopController")
 @RequestMapping("/admin/shop")
-@Api(tags = "商店管理接口")
+@Api(tags = "Shop management interface")
 @Slf4j
 public class ShopController {
 
@@ -19,29 +19,29 @@ public class ShopController {
     @Autowired
     private RedisTemplate redisTemplate;
     /**
-     * 更新商店状态
-     * @param status 商店状态
-     * @return 成功消息
+     * Update shop status
+     * @param status Shop status
+     * @return Success message
      */
     @PutMapping("/{status}")
-    @ApiOperation("更新商店状态")
+    @ApiOperation("Update shop status")
     public Result setStatus(@PathVariable Integer status) {
-        log.info("设置商店状态为: {}", status == 1 ? "营业中" : "打烊中");
-        // 将商店状态存入Redis
+        log.info("Set shop status to: {}", status == 1 ? "Open" : "Closed");
+        // Store shop status in Redis
         redisTemplate.opsForValue().set(KEY, status);
-        return Result.success("商店状态已更新为: " + status);
+        return Result.success("Shop status updated to: " + status);
     }
 
     /**
-     * 获取商店状态
-     * @return 商店状态
+     * Get shop status
+     * @return Shop status
      */
     @GetMapping("/status")
-    @ApiOperation("获取商店状态")
+    @ApiOperation("Get shop status")
     public Result<Integer> getStatus() {
         Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
 
-        log.info("当前商店状态: {}", status == 1 ? "营业中" : "打烊中");
+        log.info("Current shop status: {}", status == 1 ? "Open" : "Closed");
         return Result.success(status);
     }
 }

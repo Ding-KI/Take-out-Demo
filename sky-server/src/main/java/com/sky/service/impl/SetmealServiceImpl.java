@@ -36,27 +36,27 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private DishMapper dishMapper;
 
-    // 新增套餐,保存套餐和菜品的关系
+    // Add setmeal, save setmeal and dish relationship
     @Transactional
     public void saveWithDish(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
 
-        //向套餐表中插入数据
+        // Insert data into the setmeal table
         setmealMapper.insert(setmeal);
-        //获取生成套餐id
+        // Get the generated setmeal ID
         Long setmealId = setmeal.getId();
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         setmealDishes.forEach(setmealDish -> {
             setmealDish.setSetmealId(setmealId);
         });
 
-        //保存套餐和菜品的关系
+        // Save the relationship between the setmeal and the dish
         setmealDishMapper.insertBatch(setmealDishes);
     }
 
     /**
-     * 分页查询
+     * Page query
      * @param setmealPageQueryDTO
      * @return
      */
@@ -70,8 +70,8 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     /**
-     * 批量删除套餐
-     * @param ids 套餐ID列表
+     * Batch delete setmeal
+     * @param ids Setmeal ID list
      */
     @Transactional
     public void deleteBatch(List<Long> ids) {
@@ -83,14 +83,14 @@ public class SetmealServiceImpl implements SetmealService {
         });
 
         ids.forEach(setmealid -> {
-            // 删除套餐表数据
+            // Delete the setmeal table data
             setmealMapper.deleteById(setmealid);
-            // 删除套餐和菜品的关系
+            // Delete the relationship between the setmeal and the dish
             setmealDishMapper.deleteBySetmealId(setmealid);
         });
     }
 
-    // 根据id查询套餐,以及套餐和菜品的关系
+    // Query setmeal by ID, and query the relationship between the setmeal and the dish
     public SetmealVO getByIdwithDish(Long id) {
         Setmeal setmeal = setmealMapper.getById(id);
         List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
@@ -100,35 +100,35 @@ public class SetmealServiceImpl implements SetmealService {
         return setmealVO;
     }
 
-    //修改套餐
+    // Modify setmeal
     @Transactional
     public void update(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
 
-        // 更新套餐信息
+        // Update setmeal information
         setmealMapper.update(setmeal);
-        Long setmealId = setmeal.getId(); // 获取套餐ID
+        Long setmealId = setmeal.getId(); // Get the setmeal ID
 
-        // 删除原有的套餐菜品关系
+        // Delete the existing setmeal dish relationship
         setmealDishMapper.deleteBySetmealId(setmeal.getId());
 
-        // 保存新的套餐菜品关系
+        // Save the new setmeal dish relationship
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         setmealDishes.forEach(setmealDish -> {
            setmealDish.setSetmealId(setmealId);
         });
 
-        //重新插入套餐和菜品的关联关系，操作setmeal_dish表，执行insert语句
+        // Reinsert the relationship between the setmeal and the dish, operate the setmeal_dish table, and execute the insert statement
         setmealDishMapper.insertBatch(setmealDishes);
     }
 
-    /* 停售或起售套餐
-    @param status 套餐状态
-    @param id 套餐ID
+    /* Stop sale or start sale setmeal
+    @param status Setmeal status
+    @param id Setmeal ID
      */
     public void startOrStop(Integer status, Long id) {
-        //需要先判断套餐内是否有停售菜品，若有，则需要提示套餐内含有停售菜品，不能起售
+        // First check if there are any dishes in the setmeal that are stopped for sale, if there are, prompt that the setmeal contains stopped dishes and cannot be started for sale
         if( StatusConstant.ENABLE == status) {
             List<Dish> dishList = dishMapper.getBySetmealId(id);
             if(dishList.size()>0 && dishList != null) {
@@ -146,7 +146,7 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     /**
-     * 条件查询
+     * Condition query
      * @param setmeal
      * @return
      */
@@ -156,7 +156,7 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     /**
-     * 根据id查询菜品选项
+     * Query dish options by ID
      * @param id
      * @return
      */

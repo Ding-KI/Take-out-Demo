@@ -47,54 +47,54 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private WorkspaceService workspaceService;
 
-    // 统计指定日期区间内的营业额
+    // Count turnover within a specified date range
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
-        //返回dateList-TurnoverReportVO的属性,从begin到end的日期列表
+        // Return the dateList attribute of TurnoverReportVO, a list of dates from begin to end
         List<LocalDate> dateList = new ArrayList<>();
         while(!begin.isAfter(end)) {
             dateList.add(begin);
             begin = begin.plusDays(1);
         }
 
-        //返回turnoverList-TurnoverReportVO的属性,每个日期对应的营业额列表
+        // Return the turnoverList attribute of TurnoverReportVO, a list of turnovers corresponding to each date
         List<Double> turnoverList = new ArrayList<>();
-        //遍历日期列表，查询每个日期的营业额
+        // Traverse the date list, query the turnover for each date
         for(LocalDate date : dateList) {
-            //营业额：状态为已完成的订单总金额
-            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); //传入sql的时间点
+            // Turnover: total amount of completed orders
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); // Pass in the time point of the sql
             LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
             Map map = new HashMap();
             map.put("beginTime", beginTime);
             map.put("endTime", endTime);
-            map.put("status", Orders.COMPLETED); //状态为已完成
+            map.put("status", Orders.COMPLETED); // Status is completed
             Double turnover = orderMapper.sumByMap(map);
-            // 如果没有订单，则营业额为0
+            // If there are no orders, the turnover is 0
             turnover = turnover == null ? 0.0 : turnover;
             turnoverList.add(turnover);
         }
 
-        // 目前返回一个空的 TurnoverReportVO 对象作为占位符
+        // Currently return an empty TurnoverReportVO object as a placeholder
         return TurnoverReportVO.builder()
                 .dateList(StringUtils.join(dateList, ','))
                 .turnoverList(StringUtils.join(turnoverList, ','))
                 .build();
     }
 
-    // 用户统计
+    // User statistics
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
-        //返回dateList-TurnoverReportVO的属性,从begin到end的日期列表
+        // Return the dateList attribute of TurnoverReportVO, a list of dates from begin to end
         List<LocalDate> dateList = new ArrayList<>();
         while(!begin.isAfter(end)) {
             dateList.add(begin);
             begin = begin.plusDays(1);
         }
 
-        //存放新增用户和总用户的列表
+        // Store the list of new users and total users
         List<Integer> newUserList = new ArrayList<>();
         List<Integer> totalUserList = new ArrayList<>();
 
         for(LocalDate date : dateList) {
-            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); //传入sql的时间点
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); // Pass in the time point of the sql
             LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
 
             Map map = new HashMap();
@@ -114,37 +114,37 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
-    //订单统计
+    // Order statistics
     public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
-        //返回dateList-OrderReportVO的属性,从begin到end的日期列表
+        // Return the dateList attribute of OrderReportVO, a list of dates from begin to end
         List<LocalDate> dateList = new ArrayList<>();
         while(!begin.isAfter(end)) {
             dateList.add(begin);
             begin = begin.plusDays(1);
         }
 
-        //存放每天的订单数和有效订单数
+        // Store the number of orders and valid orders for each day
         List<Integer> orderList = new ArrayList<>();
         List<Integer> validOrderList = new ArrayList<>();
 
-        //查询每天订单数和有效订单数
+        // Query the number of orders and valid orders for each day
         for(LocalDate date : dateList) {
-            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); //传入sql的时间点
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN); // Pass in the time point of the sql
             LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
 
-            // 统计每天的订单数量
-            Integer orderCount = getOrderCount(beginTime, endTime, null); // 传入null表示统计所有状态的订单
-            //统计每天的有效订单数量
-            Integer validOrderCount = getOrderCount(beginTime, endTime, Orders.COMPLETED); // 只统计已完成的订单
+            // Count the number of orders for each day
+            Integer orderCount = getOrderCount(beginTime, endTime, null); // Pass in null to represent all status orders
+            // Count the number of valid orders for each day
+            Integer validOrderCount = getOrderCount(beginTime, endTime, Orders.COMPLETED); // Only count completed orders
 
             orderList.add(orderCount);
             validOrderList.add(validOrderCount);
         }
 
-        //计算区间内的总订单数和总有效订单数
+        // Calculate the total number of orders and total number of valid orders within the interval
         Integer totalOrderCount = orderList.stream().reduce(Integer::sum).get();
         Integer totalValidOrderCount = validOrderList.stream().reduce(Integer::sum).get();
-        //计算订单完成率
+        // Calculate the order completion rate
         Double completionRate = totalOrderCount == 0 ? 0.0 : (double) totalValidOrderCount / totalOrderCount * 100;
 
         return OrderReportVO.builder()
@@ -156,12 +156,12 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
-    // 统计销量前十的菜品
+    // Count the top 10 dishes by sales
     public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end){
         LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
         LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
         List<GoodsSalesDTO> salesTop10= orderMapper.getSalesTop10(beginTime, endTime);
-        //stream流处理，获取商品名称和销量
+        // Stream processing, get the product name and sales
         List<String> names = salesTop10.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
         String nameList = StringUtils.join(names, ',');
 
@@ -173,7 +173,7 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
-    //根据条件统计订单数量
+    // Count the number of orders by conditions
     private Integer getOrderCount(LocalDateTime beginTime, LocalDateTime endTime, Integer status) {
         Map map = new HashMap<>();
         map.put("begin", beginTime);
@@ -182,53 +182,53 @@ public class ReportServiceImpl implements ReportService {
         return orderMapper.countByMap(map);
     }
 
-    //导出报表
+    // Export report
     public void exportReport(HttpServletResponse response) {
-        //1, 查询数据库，获取最近30天营业数据
+        //1, Query the database, get the recent 30 days of business data
         LocalDate dateBegin = LocalDate.now().minusDays(30);
         LocalDate dateEnd = LocalDate.now().minusDays(1);
         BusinessDataVO businessDataVO = workspaceService.getBusinessData(LocalDateTime.of(dateBegin, LocalTime.MIN), LocalDateTime.of(dateEnd, LocalTime.MAX));
-        //2.通过Apache POI导出Excel
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
+        //2.export Excel file
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("template/operation_data_report_template.xlsx");
 
         try {
-            // 生成Excel文件
+            // Generate Excel file
             XSSFWorkbook excel = new XSSFWorkbook(inputStream);
 
-            //开始填充数据
-            XSSFSheet sheet = excel.getSheet("sheet1"); //获取标签页
-            //填充标签页-时间
+            // Start filling data
+            XSSFSheet sheet = excel.getSheet("sheet1"); // Get the label page
+            // Fill the label page - time
             sheet.getRow(1).getCell(1).setCellValue("time：" + dateBegin + "至" + dateEnd);
-            //填充标签页第4行-营业额,完成率
+            // Fill the label page - turnover, completion rate
             XSSFRow row = sheet.getRow(3);
             row.getCell(2).setCellValue(businessDataVO.getTurnover());
             row.getCell(4).setCellValue(businessDataVO.getOrderCompletionRate());
             row.getCell(6).setCellValue(businessDataVO.getNewUsers());
-            //填充标签页第5行-有效订单数,平均客单价
+            // Fill the label page - valid order number, average customer unit price
             row = sheet.getRow(4);
             row.getCell(2).setCellValue(businessDataVO.getValidOrderCount());
             row.getCell(4).setCellValue(businessDataVO.getUnitPrice());
 
-            //填充标签页第8行及以下行-订单明细
+            // Fill the label page - order details
             for(int i = 0; i < 30; i++) {
                 LocalDate date = dateBegin.plusDays(i);
                 BusinessDataVO businessData = workspaceService.getBusinessData(
                         LocalDateTime.of(date, LocalTime.MIN),
                         LocalDateTime.of(date, LocalTime.MAX));
                 row = sheet.getRow(7+i);
-                row.getCell(1).setCellValue(date.toString()); //日期
-                row.getCell(2).setCellValue(businessData.getTurnover()); //营业额
-                row.getCell(3).setCellValue(businessData.getValidOrderCount()); //有效订单数
-                row.getCell(4).setCellValue(businessData.getOrderCompletionRate()); //订单完成率
-                row.getCell(5).setCellValue(businessData.getUnitPrice()); //平均客单价
-                row.getCell(6).setCellValue(businessData.getNewUsers()); //新增用户数
+                row.getCell(1).setCellValue(date.toString()); // Date
+                row.getCell(2).setCellValue(businessData.getTurnover()); // Turnover
+                row.getCell(3).setCellValue(businessData.getValidOrderCount()); // Valid order number
+                row.getCell(4).setCellValue(businessData.getOrderCompletionRate()); // Order completion rate
+                row.getCell(5).setCellValue(businessData.getUnitPrice()); // Average customer unit price
+                row.getCell(6).setCellValue(businessData.getNewUsers()); // New user number
             }
 
 
-            //3.通过输出流将excel文件写入到响应中
+            //3.write the Excel file to the response through the output stream
             ServletOutputStream outputStream = response.getOutputStream();
             excel.write(outputStream);
-            //4.关闭资源
+            //4.close the resource
             outputStream.close();
             excel.close();
 

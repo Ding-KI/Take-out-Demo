@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Select;
 public interface EmployeeMapper {
 
     /**
-     * 根据用户名查询员工
+     * Query by username
      * @param username
      * @return
      */
@@ -21,7 +21,7 @@ public interface EmployeeMapper {
     Employee getByUsername(String username);
 
     /**
-     * 插入员工
+     * Insert employee
      * @param employee
      */
     @Insert( "insert into employee(name, username,password,phone,sex, id_number, create_time, update_time, create_user, update_user) " +
@@ -31,21 +31,21 @@ public interface EmployeeMapper {
     void insert(Employee employee);
 
     /**
-     * 分页查询员工信息
+     * Page query employee information
      * @param employeePageQueryDTO
      * @return
      */
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
     /**
-     * 根据主键动态修改属性
+     * Modify by primary key
      * @param employee
-     * 动态语句，mapper.xml中使用<set>标签
+     * Dynamic statement, use <set> tag in mapper.xml
      */
 
     @AutoFill(value = OperationType.UPDATE)
     void update(Employee employee);
 
-    @Select("select * from employee where id = #{id}") //语句简单，直接注入
+    @Select("select * from employee where id = #{id}") // Simple statement, directly inject
     Employee getById(Long id);
 }

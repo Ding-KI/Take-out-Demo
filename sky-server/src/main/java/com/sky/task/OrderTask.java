@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 自定义定时任务，实现订单状态定时处理
+ * Custom timed task, implement timed processing of order status
  */
 @Component
 @Slf4j
@@ -22,12 +22,12 @@ public class OrderTask {
 
 
     /**
-     * 处理支付超时订单
+     * Process payment timeout order
      */
     @Scheduled(cron = "0 * * * * ?")
 
     public void processTimeoutOrder() {
-        log.info("处理支付超时订单：{}", new Date());
+        log.info("Process payment timeout order: {}", new Date());
 
         LocalDateTime time = LocalDateTime.now().plusMinutes(-15);
 
@@ -36,7 +36,7 @@ public class OrderTask {
         if (ordersList != null && ordersList.size() > 0) {
             ordersList.forEach(orders -> {
                 orders.setStatus(Orders.CANCELLED);
-                orders.setCancelReason("支付超时，自动取消");
+                orders.setCancelReason("Payment timeout, automatically cancelled");
                 orders.setCancelTime(LocalDateTime.now());
                 orderMapper.update(orders);
             });
@@ -44,11 +44,11 @@ public class OrderTask {
     }
 
     /**
-     * 处理“派送中”状态的订单
+     * Process "delivery in progress" status orders
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void processDeliveryOrder(){
-        log.info("处理派送中订单：{}", new Date());
+        log.info("Process delivery in progress order: {}", new Date());
 
         LocalDateTime time = LocalDateTime.now().plusMinutes(-60);
 

@@ -9,16 +9,16 @@ import java.util.List;
 
 @Mapper
 public interface SetmealDishMapper {
-    // 根据菜品ID查询套餐ID
+    // Query setmeal ID by dish ID
     List<Long> getSetmealIdbyDishIds(List<Long> dishIds);
 
     void insertBatch(List<SetmealDish> setmealDishes);
 
-    // 根据套餐ID删除套餐菜品关系
+    // Delete setmeal dish relationship by setmeal ID
     @Delete("delete from setmeal_dish where setmeal_id = #{setmealid}")
     void deleteBySetmealId(Long setmealid);
 
-    // 根据套餐ID查询套餐和套餐菜品关系
+    // Query setmeal and setmeal dish relationship by setmeal ID
     @Select("select * from setmeal_dish where setmeal_id = #{setmealId}")
     List<SetmealDish> getBySetmealId(Long id);
 }

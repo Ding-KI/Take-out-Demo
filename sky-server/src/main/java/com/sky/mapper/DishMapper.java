@@ -17,7 +17,7 @@ import java.util.Map;
 public interface DishMapper {
 
     /**
-     * 根据分类id查询菜品数量
+     * Query the number of dishes by category ID
      * @param categoryId
      * @return
      */
@@ -25,39 +25,39 @@ public interface DishMapper {
     Integer countByCategoryId(Long categoryId);
 
     /**
-     * 插入菜品
+     * Insert dish
      * @param dish
      */
     @AutoFill(value= OperationType.INSERT)
     void insert(Dish dish);
 
-    // 分页查询菜品
+    // Page query
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    // 根据ID查询菜品
+    // Query by ID
     @Select("select * from dish where id = #{id}")
     Dish getById(Long id);
 
-    //删除菜品
+    // Delete dish
     @Delete("delete from dish where id = #{id}")
     void deleteById(Long id);
 
-    // 根据菜品id集合，批量删除菜品
+    // Delete dishes by ID collection
     void deleteByIds(List<Long> ids);
 
-    //根据id动态修改菜品信息
+    // Modify dish information by ID
     @AutoFill(value= OperationType.UPDATE)
     void update(Dish dish);
 
-    //根据分类id查询菜品，动态查询
+    // Query dishes by category ID, dynamic query
     List<Dish> list(Dish dish);
 
-    //根据套餐id查询菜品
+    // Query dishes by setmeal ID
     @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
     List<Dish> getBySetmealId(Long id);
 
     /**
-     * 根据条件统计菜品数量
+     * Count dishes by conditions
      * @param map
      * @return
      */

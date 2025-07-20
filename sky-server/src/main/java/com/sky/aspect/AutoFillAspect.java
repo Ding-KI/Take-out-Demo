@@ -1,7 +1,7 @@
 package com.sky.aspect;
 
 /*
-* 自定义切面类，实现公共字段自动填充处理逻辑*/
+* Custom aspect class, implement public field automatic filling processing logic*/
 
 import com.sky.annotation.AutoFill;
 import com.sky.constant.AutoFillConstant;
@@ -23,42 +23,42 @@ import java.time.LocalDateTime;
 @Component
 @Slf4j
 public class AutoFillAspect {
-    /*切入点*/
+    /*Pointcut*/ 
     @Pointcut("execution(* com.sky.mapper.*.*(..)) && @annotation(com.sky.annotation.AutoFill)")
     public void autoFillPointCut(){}
 
-    /*前置通知：在方法执行之前执行*/
+    /*in advance notification: before method execution*/    
     @Before("autoFillPointCut()")
     public void autoFill(JoinPoint joinPoint){
-        log.info("开始进行公共字段自动填充处理");
+        log.info("start to fill public fields");
 
-        //获取当前被拦截的方法参数（数据库操作类型）
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature(); //获取方法签名
-        AutoFill autoFill= signature.getMethod().getAnnotation(AutoFill.class); //获取方法上的注解对象
-        OperationType operationType = autoFill.value(); //获取操作类型
-        //获取当前被拦截的方法的参数-实体对象
+        // Get the current intercepted method parameter (database operation type)
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature(); // Get method signature
+        AutoFill autoFill= signature.getMethod().getAnnotation(AutoFill.class); // Get annotation object on method
+        OperationType operationType = autoFill.value(); // Get operation type
+        // Get the current intercepted method parameter - entity object
         Object[] args = joinPoint.getArgs();
         if(args.length == 0){
             return;
         }
 
-        Object entity = args[0]; //假设第一个参数是需要填充的实体对象
+        Object entity = args[0]; // Assume the first parameter is the entity object to be filled
 
-        //准备赋值的数据-当前时间、当前用户ID等
+        // Prepare data to be assigned - current time, current user ID, etc.
 
-        LocalDateTime now = LocalDateTime.now(); //获取当前时间
-        Long currentId = BaseContext.getCurrentId(); //获取当前用户ID
+        LocalDateTime now = LocalDateTime.now(); // Get current time
+        Long currentId = BaseContext.getCurrentId(); // Get current user ID
 
-        //判断操作类型，通过反射进行赋值
+        // Determine operation type, set value by reflection
         if(operationType == OperationType.INSERT){
-            //为4个字段赋值
+            // Set value for 4 fields
             try{
                 Method setCreateTime = entity.getClass().getMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
                 Method setCreateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Long.class);
                 Method setUpdateTime = entity.getClass().getMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
                 Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
-                //通过反射为对象赋值
+                // Set value by reflection
                 setCreateTime.invoke(entity, now);
                 setCreateUser.invoke(entity, currentId);
                 setUpdateTime.invoke(entity, now);
@@ -69,12 +69,12 @@ public class AutoFillAspect {
             }
 
         }else if(operationType == OperationType.UPDATE){
-            //为2个字段赋值
+            // Set value for 2 fields
             try{
                 Method setUpdateTime = entity.getClass().getMethod(AutoFillConstant.SET_UPDATE_TIME, LocalDateTime.class);
                 Method setUpdateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_UPDATE_USER, Long.class);
 
-                //通过反射为对象赋值
+                // Set value by reflection
                 setUpdateTime.invoke(entity, now);
                 setUpdateUser.invoke(entity, currentId);
 

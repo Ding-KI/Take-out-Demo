@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * OSS配置类,用于创建AliOssUtil实例对象
+ * OSS configuration class, used to create AliOssUtil instance object
  */
 
 @Configuration

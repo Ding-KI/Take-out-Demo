@@ -9,55 +9,55 @@ import com.sky.vo.OrderVO;
 
 public interface OrderService {
 
-    //用户提交订单
+    // User submit order
     OrderSubmitVO submitOrder(OrdersSubmitDTO orderSubmitDTO);
 
     /**
-     * 订单支付
+     * Order payment
      * @param ordersPaymentDTO
      * @return
      */
     OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
 
     /**
-     * 支付成功，修改订单状态
+     * Payment successful, modify order status
      * @param outTradeNo
      */
     void paySuccess(String outTradeNo);
 
-    // 用户催单
+    // User reminder
     void reminder(Long id);
 
-    // 分页查询用户订单
+    // Page query user order
     PageResult pageQuery4User(int page, int pageSize, Integer status);
 
-    // 查询订单详情
+    // Query order details
     OrderVO details(Long id);
 
-    // 用户取消订单
+    // User cancel order
     void userCancelById(Long id) throws Exception;
 
-    // 用户再来一单，把原订单商品重新添加到购物车
+    // User repeat order, add original order goods to shopping cart again
     void repetition(Long id);
 
-    // 管理员条件查询订单
+    // Admin condition query order
     PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
 
-    // 管理员查询各个状态的订单数量统计
+    // Admin query order number statistics by status
     OrderStatisticsVO statistics();
 
-    //接单
+    // Accept order
     void confirm(OrdersConfirmDTO ordersConfirmDTO);
 
-    // 拒单
+    // Reject order
     void rejection(OrdersRejectionDTO ordersRejectionDTO) throws Exception;
 
-    // 取消订单
+    // Cancel order
     void cancel(OrdersCancelDTO ordersCancelDTO) throws  Exception;
 
-    //派送订单
+    // Delivery order
     void delivery(Long id);
 
-    //完成订单
+    // Complete order
     void complete(Long id);
 }

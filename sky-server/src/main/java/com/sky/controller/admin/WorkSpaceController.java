@@ -17,27 +17,27 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * 工作台
+ * Workbench
  */
 @RestController
 @RequestMapping("/admin/workspace")
 @Slf4j
-@Api(tags = "工作台相关接口")
+@Api(tags = "Workbench related interface")
 public class WorkSpaceController {
 
     @Autowired
     private WorkspaceService workspaceService;
 
     /**
-     * 工作台今日数据查询
+     * Workbench today data query
      * @return
      */
     @GetMapping("/businessData")
-    @ApiOperation("工作台今日数据查询")
+    @ApiOperation("Workbench today data query")
     public Result<BusinessDataVO> businessData(){
-        //获得当天的开始时间
+        // Get the start time of the current day
         LocalDateTime begin = LocalDateTime.now().with(LocalTime.MIN);
-        //获得当天的结束时间
+        // Get the end time of the current day
         LocalDateTime end = LocalDateTime.now().with(LocalTime.MAX);
 
         BusinessDataVO businessDataVO = workspaceService.getBusinessData(begin, end);
@@ -45,31 +45,31 @@ public class WorkSpaceController {
     }
 
     /**
-     * 查询订单管理数据
+     * Query order management data
      * @return
      */
     @GetMapping("/overviewOrders")
-    @ApiOperation("查询订单管理数据")
+    @ApiOperation("Query order management data")
     public Result<OrderOverViewVO> orderOverView(){
         return Result.success(workspaceService.getOrderOverView());
     }
 
     /**
-     * 查询菜品总览
+     * Query dish overview
      * @return
      */
     @GetMapping("/overviewDishes")
-    @ApiOperation("查询菜品总览")
+    @ApiOperation("Query dish overview")
     public Result<DishOverViewVO> dishOverView(){
         return Result.success(workspaceService.getDishOverView());
     }
 
     /**
-     * 查询套餐总览
+     * Query setmeal overview
      * @return
      */
     @GetMapping("/overviewSetmeals")
-    @ApiOperation("查询套餐总览")
+    @ApiOperation("Query setmeal overview")
     public Result<SetmealOverViewVO> setmealOverView(){
         return Result.success(workspaceService.getSetmealOverView());
     }

@@ -20,11 +20,11 @@ spring:
 
 
 mybatis:
-  #mapper配置文件
+  #mapper configuration file
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.sky.entity
   configuration:
-    #开启驼峰命名
+    # Enable camel case naming
     map-underscore-to-camel-case: true
 
 logging:
@@ -37,13 +37,14 @@ logging:
 
 sky:
   jwt:
-    # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: itcast
-    # 设置jwt过期时间
+    # Set the secret key used when signing jwt
+    admin-secret-key: demo_admin_secret_key
+    # Set jwt expiration time
     admin-ttl: 7200000
-    # 设置前端传递过来的令牌名称
+    # Set the name of the token passed from the front end
     admin-token-name: token
-    user-secret-key: itcast
+
+    user-secret-key: demo_user_secret_key
     user-token-name: authentication
     user-ttl: 7200000
   alioss:

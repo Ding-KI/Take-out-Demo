@@ -11,35 +11,35 @@ import java.util.List;
 
 public interface SetmealService {
     /**
-     * 批量删除套餐
-     * @param ids 套餐ID列表
+     * Batch delete setmeal
+     * @param ids Setmeal ID list
      */
     void deleteBatch(List<Long> ids);
 
-    // 新增套餐,保存套餐和菜品的关系
+    // Add setmeal, save setmeal and dish relationship
     void saveWithDish(SetmealDTO setmealDTO);
 
-    // 套餐分页查询
+    // Setmeal page query
     PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
-    // 根据id查询套餐
+    // Query by ID
     SetmealVO getByIdwithDish(Long id);
 
-    //修改套餐
+    // Modify setmeal
     void update(SetmealDTO setmealDTO);
 
-    // 停售或起售套餐
+    // Stop sale or start sale setmeal
     void startOrStop(Integer status, Long id);
 
     /**
-     * 条件查询
+     * Condition query
      * @param setmeal
      * @return
      */
     List<Setmeal> list(Setmeal setmeal);
 
     /**
-     * 根据id查询菜品选项
+     * Query dish options by ID
      * @param id
      * @return
      */

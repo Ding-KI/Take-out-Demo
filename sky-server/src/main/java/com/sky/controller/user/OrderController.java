@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController("userOrderController")
 @RequestMapping("/user/order")
-@Api(tags = "C端订单管理接口")
+@Api(tags = "Client-end order management interface")
 @Slf4j
 public class OrderController {
 
@@ -24,42 +24,42 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/submit")
-    @ApiOperation("用户提交订单")
+    @ApiOperation("User submit order")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO orderSubmitDTO) {
-        // 订单提交逻辑
-        // 这里可以调用订单服务进行订单的创建和处理
-        // 返回订单提交结果
+        // Order submission logic
+        // Here you can call the order service to create and process the order
+        // Return order submission result
         log.info("用户提交订单: {}", orderSubmitDTO);
         OrderSubmitVO orderSubmitVO = orderService.submitOrder(orderSubmitDTO);
         return Result.success(orderSubmitVO);
     }
 
     /**
-     * 订单支付
+     * Order payment
      *
      * @param ordersPaymentDTO
      * @return
      */
     @PutMapping("/payment")
-    @ApiOperation("订单支付")
+    @ApiOperation("Order payment")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
-        log.info("订单支付：{}", ordersPaymentDTO);
+        log.info("Order payment: {}", ordersPaymentDTO);
         OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
-        log.info("生成预支付交易单：{}", orderPaymentVO);
+        log.info("Generate pre-payment transaction order: {}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
 
-    //用户催单
+    // User reminder
     @GetMapping("/reminder/{id}")
-    @ApiOperation("用户催单")
+    @ApiOperation("User reminder")
     public Result reminder(@PathVariable("id") Long id) {
-        log.info("用户催单，订单ID：{}", id);
+        log.info("User reminder, order ID: {}", id);
         orderService.reminder(id);
         return Result.success();
     }
 
     /**
-     * 历史订单查询
+     * Query historical orders
      *
      * @param page
      * @param pageSize
@@ -67,7 +67,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("/historyOrders")
-    @ApiOperation("历史订单查询")
+    @ApiOperation("Query historical orders")
     public Result<PageResult> page(int page, int pageSize, Integer status) {
         PageResult pageResult = orderService.pageQuery4User(page, pageSize, status);
         return Result.success(pageResult);
@@ -80,7 +80,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("/orderDetail/{id}")
-    @ApiOperation("查询订单详情")
+    @ApiOperation("Query order details")
     public Result<OrderVO> details(@PathVariable("id") Long id) {
         OrderVO orderVO = orderService.details(id);
         return Result.success(orderVO);
@@ -92,7 +92,7 @@ public class OrderController {
      * @return
      */
     @PutMapping("/cancel/{id}")
-    @ApiOperation("取消订单")
+    @ApiOperation("Cancel order")
     public Result cancel(@PathVariable("id") Long id) throws Exception {
         orderService.userCancelById(id);
         return Result.success();
@@ -105,7 +105,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("/repetition/{id}")
-    @ApiOperation("再来一单")
+    @ApiOperation("Order repetition")
     public Result repetition(@PathVariable Long id) {
         orderService.repetition(id);
         return Result.success();

@@ -15,43 +15,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/user/shoppingCart")
 @Slf4j
-@Api(tags = "C端购物车管理接口")
+@Api(tags = "Client-end shopping cart management interface")
 public class ShoppingCartController {
 
     @Autowired
     private ShoppingCartService shoppingCartService;
 
     @PostMapping("/add")
-    @ApiOperation("添加购物车")
+    @ApiOperation("Add shopping cart")
     public Result add(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        log.info("添加购物车: {}", shoppingCartDTO);
+        log.info("Add shopping cart: {}", shoppingCartDTO);
         shoppingCartService.addShoppingCart(shoppingCartDTO);
         return Result.success();
     }
 
-    /*查询购物车
+    /*Query shopping cart
      */
     @GetMapping("/list")
-    @ApiOperation("查询购物车")
+    @ApiOperation("Query shopping cart")
     public Result <List<ShoppingCart>> list(){
         List<ShoppingCart> list = shoppingCartService.showShoppingCart();
         return Result.success(list);
     }
 
-    //清空购物车
+    // Empty shopping cart
     @DeleteMapping("/clean")
-    @ApiOperation("清空购物车")
+    @ApiOperation("Empty shopping cart")
     public Result clean() {
-        log.info("清空购物车");
+        log.info("Empty shopping cart");
         shoppingCartService.cleanShoppingCart();
         return Result.success();
     }
 
-    //删除购物车中的某一项
+    // Delete an item in the shopping cart
     @PostMapping("/sub")
-    @ApiOperation("删除购物车中的某一项")
+    @ApiOperation("Delete an item in the shopping cart")
     public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        log.info("删除购物车中的某一项: {}", shoppingCartDTO);
+        log.info("Delete an item in the shopping cart: {}", shoppingCartDTO);
         shoppingCartService.subShoppingCart(shoppingCartDTO);
         return Result.success();
     }

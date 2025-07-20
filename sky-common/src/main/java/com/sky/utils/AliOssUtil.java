@@ -20,7 +20,7 @@ public class AliOssUtil {
     private String bucketName;
 
     /**
-     * 文件上传
+     * File upload
      *
      * @param bytes
      * @param objectName
@@ -28,11 +28,11 @@ public class AliOssUtil {
      */
     public String upload(byte[] bytes, String objectName) {
 
-        // 创建OSSClient实例。
+        // Create OSSClient instance
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
         try {
-            // 创建PutObject请求。
+            // Create PutObject request
             ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(bytes));
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
@@ -52,7 +52,7 @@ public class AliOssUtil {
             }
         }
 
-        //文件访问路径规则 https://BucketName.Endpoint/ObjectName
+        // File access path rule https://BucketName.Endpoint/ObjectName
         StringBuilder stringBuilder = new StringBuilder("https://");
         stringBuilder
                 .append(bucketName)
@@ -61,7 +61,7 @@ public class AliOssUtil {
                 .append("/")
                 .append(objectName);
 
-        log.info("文件上传到:{}", stringBuilder.toString());
+        log.info("File uploaded to:{}", stringBuilder.toString());
 
         return stringBuilder.toString();
     }

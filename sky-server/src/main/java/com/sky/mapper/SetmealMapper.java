@@ -19,7 +19,7 @@ import java.util.Map;
 public interface SetmealMapper {
 
     /**
-     * 根据分类id查询套餐
+     * Query by category ID
      * @param id
      * @return
      */
@@ -30,18 +30,18 @@ public interface SetmealMapper {
     void insert(Setmeal setmeal);
 
     /**
-     * 分页查询套餐
+     * Page query setmeal
      * @param setmealPageQueryDTO
      * @return
      */
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
-    //根据id查询套餐
+    // Query by ID
     @Select("select * from setmeal where id = #{id}")
     Setmeal getById(Long id);
 
 
-    // 根据id批量删除套餐
+    // Delete by ID
     @Delete("delete from setmeal where id = #{id}")
     void deleteById(Long setmealid);
 
@@ -49,7 +49,7 @@ public interface SetmealMapper {
     void update(Setmeal setmeal);
 
     /**
-     * 动态条件查询套餐
+     * Dynamic query setmeal
      * @param setmeal
      * @return
      */
@@ -57,7 +57,7 @@ public interface SetmealMapper {
 
 
     /**
-     * 根据套餐id查询菜品选项
+     * Query dish options by setmeal ID
      * @param setmealId
      * @return
      */
@@ -67,7 +67,7 @@ public interface SetmealMapper {
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
 
     /**
-     * 根据条件统计套餐数量
+     * Count setmeal by conditions
      * @param map
      * @return
      */

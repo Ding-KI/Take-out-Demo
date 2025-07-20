@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * jwt令牌校验的拦截器
+ * jwt token verification interceptor
  */
 @Component
 @Slf4j
@@ -24,7 +24,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
     private JwtProperties jwtProperties;
 
     /**
-     * 校验jwt
+     * Verify jwt
      *
      * @param request
      * @param response
@@ -34,28 +34,28 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        System.out.println("当前线程id：" + Thread.currentThread().getId());
+        System.out.println("Current thread ID: " + Thread.currentThread().getId());
 
-        //判断当前拦截到的是Controller的方法还是其他资源
+        // Determine whether the current interceptor is a Controller method or other resources
         if (!(handler instanceof HandlerMethod)) {
-            //当前拦截到的不是动态方法，直接放行
+            // The current interceptor is not a dynamic method, directly pass
             return true;
         }
 
-        //1、从请求头中获取令牌
+        //1、Get token from request header
         String token = request.getHeader(jwtProperties.getAdminTokenName());
 
-        //2、校验令牌
+        //2、Verify token
         try {
-            log.info("jwt校验:{}", token);
+            log.info("jwt verification:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-            log.info("当前员工id：", empId);
+            log.info("Current employee ID: {}", empId);
             BaseContext.setCurrentId(empId);
-            //3、通过，放行
+            //3、Passed, pass
             return true;
         } catch (Exception ex) {
-            //4、不通过，响应401状态码
+            //4、Not passed, respond with 401 status code 
             response.setStatus(401);
             return false;
         }

@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 /**
- * 支付回调相关接口
+ * Payment callback related interface
  */
 @RestController
 @RequestMapping("/notify")
@@ -30,36 +30,36 @@ public class PayNotifyController {
     private WeChatProperties weChatProperties;
 
     /**
-     * 支付成功回调
+     * Payment success callback
      *
      * @param request
      */
     @RequestMapping("/paySuccess")
     public void paySuccessNotify(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //读取数据
+        // Read data
         String body = readData(request);
-        log.info("支付成功回调：{}", body);
+        log.info("Payment success callback: {}", body);
 
-        //数据解密
+        // Data decryption
         String plainText = decryptData(body);
-        log.info("解密后的文本：{}", plainText);
+        log.info("Decrypted text: {}", plainText);
 
         JSONObject jsonObject = JSON.parseObject(plainText);
-        String outTradeNo = jsonObject.getString("out_trade_no");//商户平台订单号
-        String transactionId = jsonObject.getString("transaction_id");//微信支付交易号
+        String outTradeNo = jsonObject.getString("out_trade_no");//Merchant platform order number
+        String transactionId = jsonObject.getString("transaction_id");//WeChat payment transaction number
 
-        log.info("商户平台订单号：{}", outTradeNo);
-        log.info("微信支付交易号：{}", transactionId);
+        log.info("Merchant platform order number: {}", outTradeNo);
+        log.info("WeChat payment transaction number: {}", transactionId);
 
-        //业务处理，修改订单状态、来单提醒
+        // Business processing, modify order status, order reminder
         orderService.paySuccess(outTradeNo);
 
-        //给微信响应
+        // Response to WeChat
         responseToWeixin(response);
     }
 
     /**
-     * 读取数据
+     * Read data
      *
      * @param request
      * @return
@@ -79,7 +79,7 @@ public class PayNotifyController {
     }
 
     /**
-     * 数据解密
+     * Data decryption
      *
      * @param body
      * @return
@@ -93,7 +93,7 @@ public class PayNotifyController {
         String associatedData = resource.getString("associated_data");
 
         AesUtil aesUtil = new AesUtil(weChatProperties.getApiV3Key().getBytes(StandardCharsets.UTF_8));
-        //密文解密
+        // Ciphertext decryption
         String plainText = aesUtil.decryptToString(associatedData.getBytes(StandardCharsets.UTF_8),
                 nonce.getBytes(StandardCharsets.UTF_8),
                 ciphertext);
@@ -102,7 +102,7 @@ public class PayNotifyController {
     }
 
     /**
-     * 给微信响应
+     * Response to WeChat
      * @param response
      */
     private void responseToWeixin(HttpServletResponse response) throws Exception{

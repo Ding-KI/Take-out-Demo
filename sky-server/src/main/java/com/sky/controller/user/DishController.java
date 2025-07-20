@@ -18,7 +18,7 @@ import java.util.List;
 @RestController("userDishController")
 @RequestMapping("/user/dish")
 @Slf4j
-@Api(tags = "C端-菜品浏览接口")
+@Api(tags = "Client-end dish browsing interface")
 public class DishController {
     @Autowired
     private DishService dishService;
@@ -26,29 +26,29 @@ public class DishController {
     private RedisTemplate redisTemplate;
 
     /**
-     * 根据分类id查询菜品
+     * Query dishes by category ID
      *
      * @param categoryId
      * @return
      */
     @GetMapping("/list")
-    @ApiOperation("根据分类id查询菜品")
+    @ApiOperation("Query dishes by category ID")
     public Result<List<DishVO>> list(Long categoryId) {
-        //获取redis中的key
+        // Get the key in redis
         String key = "dish_" + categoryId;
-        //先从redis中查询菜品列表
+        // Query dishes list from redis
         List<DishVO> cachedDish = (List<DishVO>) redisTemplate.opsForValue().get(key);
-        //如果缓存中有数据，直接返回
+        // If there is data in the cache, return directly
         if (cachedDish != null && cachedDish.size()>0)  {
-            log.info("从缓存中获取菜品列表，分类ID: {}", categoryId);
+            log.info("Get dishes list from cache, category ID: {}", categoryId);
             return Result.success(cachedDish);
         }
 
-        //如果缓存中没有数据，则从数据库查询
+        // If there is no data in the cache, query from the database
         Dish dish = new Dish();
         dish.setCategoryId(categoryId);
-        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
-        //并且存入缓存
+        dish.setStatus(StatusConstant.ENABLE);// Query dishes that are on sale
+        // And store in cache
         List<DishVO> list = dishService.listWithFlavor(dish);
         redisTemplate.opsForValue().set(key, list);
         return Result.success(list);

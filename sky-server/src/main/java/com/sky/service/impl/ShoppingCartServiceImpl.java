@@ -32,33 +32,33 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void addShoppingCart(ShoppingCartDTO shoppingCartDTO) {
-        // 这里实现添加购物车的逻辑,先拷贝属性
+        // Here implement the logic of adding to the shopping cart, first copy the attributes
         ShoppingCart shoppingCart = new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
-        //获取用户id并注入
+        // Get the user ID and inject it
         Long userId = BaseContext.getCurrentId();
         shoppingCart.setUserId(userId);
 
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
-        //判断购物车中是否存在该菜品或套餐，如果存在，则数量加1，否则新增一条记录-insert
+        // Check if the shopping cart contains the dish or setmeal, if it exists, the quantity is increased by 1, otherwise a new record is added - insert
         if(list != null && list.size() > 0){
             ShoppingCart cart = list.get(0);
-            cart.setNumber(cart.getNumber()+1);//执行update语句
+            cart.setNumber(cart.getNumber()+1);// Execute the update statement
             shoppingCartMapper.updateNumberById(cart);
         }
         else {
-            //不存在，新增一条记录
-            //先判断是添加菜品或套餐
+            // Does not exist, add a new record
+            // First check if it is a dish or setmeal to be added
             Long dishId = shoppingCartDTO.getDishId();
             if(dishId!=null){
-                //是菜品添加到购物车
+                // It is a dish to be added to the shopping cart
                 Dish dish = dishMapper.getById(dishId);
-                //把菜品信息注入购物车
+                // Inject the dish information into the shopping cart
                 shoppingCart.setName(dish.getName());
                 shoppingCart.setImage(dish.getImage());
                 shoppingCart.setAmount(dish.getPrice());
             }else {
-                //是套餐添加到购物车
+                // It is a setmeal to be added to the shopping cart
                 Long setmealId = shoppingCartDTO.getSetmealId();
                 Setmeal setmeal = setmealMapper.getById(setmealId);
 
@@ -66,18 +66,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart.setImage(setmeal.getImage());
                 shoppingCart.setAmount(setmeal.getPrice());
             }
-            // 统一插入购物车记录
-            shoppingCart.setNumber(1); //数量默认为1
+            // Insert the shopping cart record
+            shoppingCart.setNumber(1); // The quantity is 1 by default
             shoppingCart.setCreateTime(LocalDateTime.now());
             shoppingCartMapper.insert(shoppingCart);
         }
     }
 
-    // 查询购物车
+    // Query shopping cart
     public List<ShoppingCart> showShoppingCart() {
-        // 获取当前用户ID
+        // Get the current user ID
         Long userId = BaseContext.getCurrentId();
-        //构造shoppingCart对象
+        // Construct the shoppingCart object
         ShoppingCart shoppingCart = ShoppingCart.builder()
                 .userId(userId)
                 .build();
@@ -85,32 +85,32 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return list;
     }
 
-    // 清空购物车
+    // Clean shopping cart
     public void cleanShoppingCart() {
-        // 获取当前用户ID
+        // Get the current user ID
         Long userId = BaseContext.getCurrentId();
-        //删除购物车记录
+        // Delete the shopping cart record
         shoppingCartMapper.deleteByUserId(userId);
     }
 
-    // 删除购物车中的某一项
+    // Delete an item in the shopping cart
     public void subShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         ShoppingCart shoppingCart = new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
-        // 获取当前用户ID, 根据用户id查询该用户的购物车记录
+        // Get the current user ID, and query the shopping cart record of the user according to the user ID
         shoppingCart.setUserId(BaseContext.getCurrentId());
 
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
 
-        //如果购物车记录不为空
+        // If the shopping cart record is not empty
         if (list != null && list.size() > 0) {
             shoppingCart = list.get(0);
             Integer number = shoppingCart.getNumber();
             if(number == 1){
-                //如果数量为1，则删除该记录
+                // If the quantity is 1, delete the record
                 shoppingCartMapper.deleteById(shoppingCart.getId());
         } else {
-            //如果数量大于1，则数量减1}
+            // If the quantity is greater than 1, the quantity is decreased by 1
                 shoppingCart.setNumber(shoppingCart.getNumber() - 1);
                 shoppingCartMapper.updateNumberById(shoppingCart);
             }

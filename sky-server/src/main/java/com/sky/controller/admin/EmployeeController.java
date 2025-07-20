@@ -66,50 +66,50 @@ public class EmployeeController {
     }
 
     /**
-     * 退出
+     * Logout
      *
      * @return
      */
     @PostMapping("/logout")
-    @ApiOperation(value = "员工退出", notes = "员工退出")
+    @ApiOperation(value = "Employee logout", notes = "Employee logout")
     public Result<String> logout() {
         return Result.success();
     }
 
 
-    //新增员工
+    // Add employee
     @PostMapping
-    @ApiOperation(value = "新增员工")
+    @ApiOperation(value = "Add employee")
     public Result save (@RequestBody EmployeeDTO employeeDTO){
-        log.info("新增员工：{}", employeeDTO);
-        System.out.println("当前线程id：" + Thread.currentThread().getId());
+        log.info("Add employee: {}", employeeDTO);
+        System.out.println("Current thread ID: " + Thread.currentThread().getId());
         employeeService.save(employeeDTO);
         return Result.success();
     }
 
-    //员工分页查询
+    // Employee page query
     @GetMapping("/page")
-    @ApiOperation("员工分页查询")
+    @ApiOperation("Employee page query")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        log.info("员工分页查询：{}", employeePageQueryDTO);
+        log.info("Employee page query: {}", employeePageQueryDTO);
         //调用业务方法
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
 
-    //设置账号状态-禁用员工
+    // Set account status - disable employee
     @PostMapping("/status/{status}")
-    @ApiOperation("启用禁用员工账号")
+    @ApiOperation("Enable/disable employee account")
     public Result startOrStop(@PathVariable Integer status, Long id) {
-        log.info("启用禁用员工账号：id={}, status={}", id, status);
+        log.info("Enable/disable employee account: id={}, status={}", id, status);
         employeeService.startOrStop(status, id);
         return Result.success();
     }
 
     /*
-    * 根据id查询员工信息*/
+    * Query employee information by ID*/
     @GetMapping("/{id}")
-    @ApiOperation("根据id查询员工信息")
+    @ApiOperation("Query employee information by ID")
     public Result<Employee> getById(@PathVariable Long id){
         Employee employee = employeeService.getById(id);
         return Result.success(employee);
@@ -118,10 +118,10 @@ public class EmployeeController {
     /*
     * */
     @PutMapping
-    @ApiOperation("修改员工信息")
+    @ApiOperation("Modify employee information")
     public Result update(@RequestBody EmployeeDTO employeeDTO) {
-        log.info("修改员工信息：{}", employeeDTO);
-        //调用业务方法
+        log.info("Modify employee information: {}", employeeDTO);
+        // Call business method
         employeeService.update(employeeDTO);
         return Result.success();
     }

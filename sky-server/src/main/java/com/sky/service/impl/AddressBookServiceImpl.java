@@ -17,7 +17,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     private AddressBookMapper addressBookMapper;
 
     /**
-     * 条件查询
+     * Condition query
      *
      * @param addressBook
      * @return
@@ -27,7 +27,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     /**
-     * 新增地址
+     * Add address
      *
      * @param addressBook
      */
@@ -38,7 +38,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     /**
-     * 根据id查询
+     * Query by ID
      *
      * @param id
      * @return
@@ -49,7 +49,7 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     /**
-     * 根据id修改地址
+     * Modify address by ID
      *
      * @param addressBook
      */
@@ -58,24 +58,25 @@ public class AddressBookServiceImpl implements AddressBookService {
     }
 
     /**
-     * 设置默认地址
+     * Set default address
      *
      * @param addressBook
      */
     @Transactional
     public void setDefault(AddressBook addressBook) {
-        //1、将当前用户的所有地址修改为非默认地址 update address_book set is_default = ? where user_id = ?
+        //update address_book set is_default = ? where user_id = ?
+        // Set all addresses of the current user to non-default addresses
         addressBook.setIsDefault(0);
         addressBook.setUserId(BaseContext.getCurrentId());
         addressBookMapper.updateIsDefaultByUserId(addressBook);
 
-        //2、将当前地址改为默认地址 update address_book set is_default = ? where id = ?
+        // Set the current address to the default address update address_book set is_default = ? where id = ?
         addressBook.setIsDefault(1);
         addressBookMapper.update(addressBook);
     }
 
     /**
-     * 根据id删除地址
+     * Delete address by ID
      *
      * @param id
      */

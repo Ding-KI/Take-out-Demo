@@ -1,11 +1,11 @@
 package com.sky.constant;
 
 /**
- * 公共字段自动填充相关常量
+ * Auto fill constant class for system fields
  */
 public class AutoFillConstant {
     /**
-     * 实体类中的方法名称
+     * Method names in entity classes
      */
     public static final String SET_CREATE_TIME = "setCreateTime";
     public static final String SET_UPDATE_TIME = "setUpdateTime";
