@@ -64,6 +64,7 @@ This is a full-featured food delivery management system backend that demonstrate
 - **Aspect-oriented programming** for cross-cutting concerns
 
 ## 🏗️ **Project Architecture**
+```text
 sky-take-out/
 ├── 📁 common/ # Shared utilities and constants
 │ ├── constant/ # System constants and messages
@@ -87,7 +88,9 @@ sky-take-out/
 │ ├── 📁 interceptor/ # JWT token interceptors
 │ ├── 📁 aspect/ # AOP aspects for auto-fill
 │ └── 📁 task/ # Scheduled task handlers
-└── 📄 sky.sql # Database initialization script
+└── 📄 initialiize.sql # Database initialization script
+└── 📄 test data.sql # Database script for inserting test data
+```
 
 ## 🚦 **Quick Start Guide**
 
