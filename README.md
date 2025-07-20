@@ -65,17 +65,17 @@ This is a full-featured food delivery management system backend that demonstrate
 
 ## 🏗️ **Project Architecture**
 sky-take-out/
-├── 📁 sky-common/ # Shared utilities and constants
+├── 📁 common/ # Shared utilities and constants
 │ ├── constant/ # System constants and messages
 │ ├── exception/ # Custom exception classes
 │ ├── properties/ # Configuration properties
 │ ├── result/ # Response wrapper classes
 │ └── utils/ # Utility classes (JWT, OSS, etc.)
-├── 📁 sky-pojo/ # Data transfer objects
+├── 📁 pojo/ # Data transfer objects
 │ ├── dto/ # Data Transfer Objects
 │ ├── entity/ # Database entity classes
 │ └── vo/ # View Objects for responses
-├── 📁 sky-server/ # Main application module
+├── 📁 server/ # Main application module
 │ ├── 📁 controller/ # REST API endpoints
 │ │ ├── admin/ # Admin panel APIs
 │ │ ├── user/ # Customer-facing APIs
